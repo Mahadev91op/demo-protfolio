@@ -17,14 +17,16 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
+      wheelMultiplier: 0.9,
+      touchMultiplier: 1.8,
     });
 
     lenisRef.current = lenis;
 
+    // Connect Lenis scroll event to GSAP ScrollTrigger
     lenis.on("scroll", ScrollTrigger.update);
 
+    // Sync GSAP ticker with Lenis requestAnimationFrame
     const updateTicker = (time: number) => {
       lenis.raf(time * 1000);
     };
@@ -32,12 +34,18 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     gsap.ticker.add(updateTicker);
     gsap.ticker.lagSmoothing(0);
 
+    // Refresh ScrollTrigger once DOM layout finishes settling
+    const refreshTimeout = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 250);
+
     return () => {
+      clearTimeout(refreshTimeout);
       gsap.ticker.remove(updateTicker);
       lenis.destroy();
       lenisRef.current = null;
     };
   }, []);
 
-  return <>{children}</>;
+  return <div className="portfolio-wrapper">{children}</div>;
 }
