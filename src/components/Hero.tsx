@@ -2,64 +2,98 @@
 
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { ArrowDown, ArrowRight, Sparkles, Code2, Layers, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Sparkles, Terminal, Code2, Layers, Compass, CheckCircle2 } from "lucide-react";
 import ThreeCanvas from "./ThreeCanvas";
 import { portfolioData } from "@/data/portfolioData";
 
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
-  const badgeRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const descRef = useRef<HTMLParagraphElement>(null);
+  const headlineRef = useRef<HTMLHeadingElement>(null);
+  const subtextRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
+  const chipsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      tl.from(badgeRef.current, {
-        y: -30,
-        opacity: 0,
-        duration: 0.8,
-        delay: 0.2,
-      })
-        .from(
-          titleRef.current,
-          {
-            y: 40,
-            opacity: 0,
-            duration: 1,
-          },
+      tl.fromTo(
+        ".hero-badge",
+        { y: -30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, delay: 0.1 }
+      )
+        .fromTo(
+          headlineRef.current,
+          { y: 50, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1 },
           "-=0.5"
         )
-        .from(
-          descRef.current,
-          {
-            y: 30,
-            opacity: 0,
-            duration: 0.8,
-          },
+        .fromTo(
+          subtextRef.current,
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8 },
           "-=0.6"
         )
-        .from(
+        .fromTo(
           ctaRef.current,
-          {
-            y: 25,
-            opacity: 0,
-            duration: 0.7,
-          },
+          { y: 25, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7 },
           "-=0.5"
         )
-        .from(
+        .fromTo(
+          ".floating-chip",
+          { scale: 0.7, opacity: 0 },
+          { scale: 1, opacity: 1, stagger: 0.1, duration: 0.6 },
+          "-=0.4"
+        )
+        .fromTo(
           statsRef.current,
-          {
-            y: 35,
-            opacity: 0,
-            duration: 0.9,
-          },
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8 },
           "-=0.4"
         );
+
+      // Continuous gentle floating animation for tech chips
+      gsap.to(".chip-1", {
+        y: -10,
+        x: 6,
+        rotation: 2,
+        duration: 3.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+      gsap.to(".chip-2", {
+        y: 12,
+        x: -8,
+        rotation: -2,
+        duration: 4,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 0.5,
+      });
+      gsap.to(".chip-3", {
+        y: -14,
+        x: -5,
+        rotation: 3,
+        duration: 3.8,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 1,
+      });
+      gsap.to(".chip-4", {
+        y: 10,
+        x: 8,
+        rotation: -1.5,
+        duration: 4.2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 1.5,
+      });
     }, heroRef);
 
     return () => ctx.revert();
@@ -69,80 +103,106 @@ export default function Hero() {
     <section
       id="hero"
       ref={heroRef}
-      className="relative min-h-screen flex flex-col justify-center items-center pt-28 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden bg-radial-gradient bg-grid-pattern"
+      className="relative min-h-[92vh] flex flex-col justify-between pt-28 pb-12 px-4 sm:px-8 lg:px-14 overflow-hidden bg-radial-hero bg-grid-pattern"
     >
-      {/* Three.js Interactive 3D Canvas */}
+      {/* 3D Three.js Interactive WebGL Scene */}
       <ThreeCanvas />
 
-      {/* Decorative gradient glow blobs */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-gradient-to-tr from-blue-400/15 to-cyan-300/15 rounded-full blur-3xl pointer-events-none -z-10" />
-      <div className="absolute top-1/3 -right-20 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
+      {/* Decorative ambient gradients */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-gradient-to-b from-blue-400/15 via-cyan-400/10 to-transparent rounded-full blur-3xl pointer-events-none -z-10" />
 
-      <div className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center">
+      {/* Top Tag & Main Content Area (Expansive Full Width) */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col items-center text-center mt-6">
         {/* Availability Badge */}
-        <div
-          ref={badgeRef}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-pill text-xs sm:text-sm font-medium text-slate-700 mb-6 shadow-sm border border-blue-200/50"
-        >
+        <div className="hero-badge inline-flex items-center gap-2.5 px-5 py-2 rounded-full glass-pill text-xs sm:text-sm font-semibold text-slate-800 mb-6 shadow-sm border border-blue-200/70">
           <span className="relative flex h-2.5 w-2.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
           </span>
-          <span>{portfolioData.personal.availability}</span>
+          <span>Available for High-Impact Projects &amp; Roles</span>
+          <span className="text-slate-300">|</span>
+          <span className="text-blue-600 font-mono">India / Remote</span>
         </div>
 
-        {/* Main Headline */}
+        {/* Big Cinematic Headline */}
         <h1
-          ref={titleRef}
-          className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1] mb-6"
+          ref={headlineRef}
+          className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-slate-900 leading-[1.05] max-w-6xl"
         >
-          Crafting High-Performance{" "}
-          <span className="text-gradient-blue inline-block">Digital Experiences</span> &amp; Modern 3D Web
+          MAHADEV
+          <span className="block text-2xl sm:text-4xl md:text-5xl lg:text-6xl mt-2 font-bold text-gradient-blue">
+            Creative Full-Stack &amp; 3D Developer
+          </span>
         </h1>
 
-        {/* Subtitle / Intro */}
+        {/* Subtitle */}
         <p
-          ref={descRef}
-          className="text-base sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed mb-8"
+          ref={subtextRef}
+          className="mt-6 text-base sm:text-xl text-slate-600 max-w-3xl leading-relaxed font-normal"
         >
-          Hi, I&apos;m <span className="font-semibold text-blue-600">Mahadev</span> — a Creative Full-Stack Developer
-          merging cutting-edge <span className="text-slate-800 font-medium">Three.js</span>,{" "}
-          <span className="text-slate-800 font-medium">GSAP animations</span>, and scalable{" "}
-          <span className="text-slate-800 font-medium">Next.js</span> engineering.
+          Transforming complex digital concepts into buttery-smooth, high-performance web applications using{" "}
+          <strong className="text-blue-600 font-semibold">Next.js</strong>,{" "}
+          <strong className="text-blue-600 font-semibold">GSAP ScrollTrigger</strong>, and{" "}
+          <strong className="text-cyan-600 font-semibold">Three.js 3D WebGL</strong>.
         </p>
 
         {/* Action Buttons */}
         <div
           ref={ctaRef}
-          className="flex flex-wrap items-center justify-center gap-4 mb-14"
+          className="mt-8 flex flex-wrap items-center justify-center gap-4"
         >
           <a
             href="#projects"
-            className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full btn-primary text-sm sm:text-base font-semibold shadow-lg shadow-blue-500/25"
+            className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full btn-primary text-sm sm:text-base font-semibold shadow-xl shadow-blue-500/25 group"
           >
-            <span>Explore Projects</span>
+            <span>Explore Pinned Projects</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </a>
 
           <a
             href="#contact"
-            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full btn-outline text-sm sm:text-base font-semibold"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-full btn-outline text-sm sm:text-base font-semibold"
           >
-            <span>Get In Touch</span>
+            <span>Let&apos;s Build Together</span>
           </a>
         </div>
 
-        {/* Floating Quick Stats Pills */}
-        <div
-          ref={statsRef}
-          className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 w-full max-w-3xl"
-        >
+        {/* Floating Asymmetric Tech Chips (Placed around the expansive viewport) */}
+        <div ref={chipsRef} className="hidden md:block w-full max-w-6xl relative h-20 pointer-events-none mt-4">
+          <div className="floating-chip chip-1 absolute left-4 top-2 glass-pill px-4 py-2 rounded-2xl shadow-md border border-blue-200/60 flex items-center gap-2 text-xs font-mono font-semibold text-blue-700 pointer-events-auto">
+            <span className="w-2 h-2 rounded-full bg-blue-600" />
+            Next.js 16 App Router
+          </div>
+
+          <div className="floating-chip chip-2 absolute right-6 top-0 glass-pill px-4 py-2 rounded-2xl shadow-md border border-cyan-200/60 flex items-center gap-2 text-xs font-mono font-semibold text-cyan-700 pointer-events-auto">
+            <span className="w-2 h-2 rounded-full bg-cyan-500" />
+            Three.js &amp; WebGL
+          </div>
+
+          <div className="floating-chip chip-3 absolute left-24 bottom-0 glass-pill px-4 py-2 rounded-2xl shadow-md border border-indigo-200/60 flex items-center gap-2 text-xs font-mono font-semibold text-indigo-700 pointer-events-auto">
+            <span className="w-2 h-2 rounded-full bg-indigo-600" />
+            GSAP ScrollTrigger
+          </div>
+
+          <div className="floating-chip chip-4 absolute right-28 bottom-2 glass-pill px-4 py-2 rounded-2xl shadow-md border border-sky-200/60 flex items-center gap-2 text-xs font-mono font-semibold text-sky-700 pointer-events-auto">
+            <span className="w-2 h-2 rounded-full bg-sky-500" />
+            60+ FPS Lenis Scroll
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Expansive Stats Strip */}
+      <div
+        ref={statsRef}
+        className="relative z-10 w-full max-w-7xl mx-auto mt-10 pt-6 border-t border-blue-100/80"
+      >
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {portfolioData.personal.stats.map((stat, idx) => (
             <div
               key={idx}
-              className="glass-card p-4 rounded-2xl flex flex-col items-center justify-center text-center group border border-blue-100/70"
+              className="glass-card p-5 rounded-2xl flex flex-col items-center text-center border border-blue-100/90 shadow-sm hover:shadow-md transition-all group"
             >
-              <span className="text-2xl sm:text-3xl font-extrabold text-blue-600 group-hover:scale-105 transition-transform">
+              <span className="text-3xl sm:text-4xl font-extrabold text-blue-600 group-hover:scale-105 transition-transform font-display">
                 {stat.value}
               </span>
               <span className="text-xs sm:text-sm font-medium text-slate-500 mt-1">
@@ -150,14 +210,6 @@ export default function Hero() {
               </span>
             </div>
           ))}
-        </div>
-      </div>
-
-      {/* Down Scroll Indicator */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-slate-400 text-xs pointer-events-none">
-        <span className="tracking-widest uppercase text-[10px] font-semibold text-blue-500/80">Scroll Down</span>
-        <div className="w-5 h-8 rounded-full border-2 border-blue-400/40 flex items-start justify-center p-1">
-          <div className="w-1.5 h-2 bg-blue-600 rounded-full animate-bounce" />
         </div>
       </div>
     </section>

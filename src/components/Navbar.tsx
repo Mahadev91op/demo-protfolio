@@ -43,10 +43,10 @@ export default function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 sm:px-6 pt-4 sm:pt-6">
       <nav
-        className={`w-full max-w-5xl rounded-full transition-all duration-300 flex items-center justify-between px-5 sm:px-7 py-3 ${
+        className={`w-full max-w-7xl rounded-full transition-all duration-300 flex items-center justify-between px-6 sm:px-8 py-3.5 ${
           scrolled
-            ? "glass-nav shadow-lg shadow-blue-900/5 py-2.5 border border-blue-200/60"
-            : "bg-white/70 backdrop-blur-md border border-white/80 shadow-sm"
+            ? "glass-nav shadow-lg shadow-blue-900/5 py-3 border border-blue-200/80"
+            : "bg-white/80 backdrop-blur-md border border-white/90 shadow-sm"
         }`}
       >
         {/* Logo */}
